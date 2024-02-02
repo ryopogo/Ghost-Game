@@ -14,7 +14,7 @@ public class Main {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             frame.setSize(screenSize.width, screenSize.height);
             // Add the label to the content pane
-            frame.getContentPane().add(new MyPanel());
+            frame.add(new MyPanel());
 
             // Make the frame visible
             frame.setVisible(true);

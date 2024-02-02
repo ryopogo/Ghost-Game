@@ -1,36 +1,40 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 
 public class MyPanel extends JPanel {
-    private Ghost ghost;
+    static final private ArrayList<Ghost> ghosts = new ArrayList<>();
+    static final private FlashLight flashlight = new FlashLight();
 
     public MyPanel() {
-        setLayout(null); // Use absolute positioning
         setOpaque(false); // Make the panel transparent
-
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\ryopo\\Downloads\\bun.png");
-
-        ghost = new Ghost(imageIcon);
-        ghost.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        add(ghost);
-        add(new JLabel("boo"));
-
-        // Use Timer to trigger periodic updates
-        Timer timer = new Timer(10, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ghost.move();
-                repaint();
-            }
-        });
-        timer.start();
-
+        for(int i = 0; i<2;i++)
+            ghosts.add(new Ghost());
+        for(Ghost ghost: ghosts){
+            add(ghost);
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        flashlight.draw(g);
+        for(Ghost ghost: ghosts){
+            ghost.move();
+            ghost.brightness();
+            if(ghost.checkKill()) {
+                remove(ghost);
+                ghosts.remove(ghost);
+            }
+        }
+
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        repaint();
     }
 }
