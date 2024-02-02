@@ -58,8 +58,8 @@ class Ghost extends JLabel {
         int x = MouseInfo.getPointerInfo().getLocation().x;
         int y = MouseInfo.getPointerInfo().getLocation().y;
         if(Math.abs(x-getX()-getWidth()/2)<200 && Math.abs(y-getY()-getHeight()/2)<200)
-            setIcon(iconDie);
-        else
             setIcon(icon);
+        else
+            setIcon(iconDie);
     }
 }

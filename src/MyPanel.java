@@ -9,7 +9,7 @@ public class MyPanel extends JPanel {
 
     public MyPanel() {
         setOpaque(false); // Make the panel transparent
-        for(int i = 0; i<2;i++)
+        for(int i = 0; i<20;i++)
             ghosts.add(new Ghost());
         for(Ghost ghost: ghosts){
             add(ghost);
