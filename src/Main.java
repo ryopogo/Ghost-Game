@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
             // Create a transparent JFrame
-            JFrame frame = new JFrame("Transparent Frame");
+            JFrame frame = new JFrame("Ghost game");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setUndecorated(true); // Remove window decorations (title bar, etc.)
             frame.setBackground(new Color(0, 0, 0, 0)); // Set transparent background
