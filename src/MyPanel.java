@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 public class MyPanel extends JPanel {
@@ -9,7 +8,7 @@ public class MyPanel extends JPanel {
 
     public MyPanel() {
         setOpaque(false); // Make the panel transparent
-        for(int i = 0; i<20;i++)
+        for(int i = 0; i<10;i++)
             ghosts.add(new Ghost());
         for(Ghost ghost: ghosts){
             add(ghost);
@@ -20,6 +19,7 @@ public class MyPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         flashlight.draw(g);
+
         for(Ghost ghost: ghosts){
             ghost.move();
             ghost.brightness();
@@ -32,7 +32,7 @@ public class MyPanel extends JPanel {
         try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println(e);
         }
 
         repaint();

@@ -55,9 +55,10 @@ class Ghost extends JLabel {
     }
 
     public void brightness(){
+        int distance = 200;
         int x = MouseInfo.getPointerInfo().getLocation().x;
         int y = MouseInfo.getPointerInfo().getLocation().y;
-        if(Math.abs(x-getX()-getWidth()/2)<200 && Math.abs(y-getY()-getHeight()/2)<200)
+        if(Math.abs(x-getX()-getWidth()/2)<distance && Math.abs(y-getY()-getHeight()/2)<distance)
             setIcon(icon);
         else
             setIcon(iconDie);
