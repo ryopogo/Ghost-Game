@@ -25,6 +25,7 @@ public class MyPanel extends JPanel {
             ghost.brightness();
             if(ghost.checkKill()) {
                 remove(ghost);
+                revalidate();
                 ghosts.remove(ghost);
             }
         }
