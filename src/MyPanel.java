@@ -13,6 +13,7 @@ public class MyPanel extends JPanel {
         for(Ghost ghost: ghosts){
             add(ghost);
         }
+        setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
     }
 
     @Override
@@ -20,12 +21,12 @@ public class MyPanel extends JPanel {
         super.paintComponent(g);
         flashlight.draw(g);
 
-        for(Ghost ghost: ghosts){
+        for(int i = 0; i < ghosts.size(); i++){
+            Ghost ghost = ghosts.get(i);
             ghost.move();
-            ghost.brightness();
+            ghost.brightness(g);
             if(ghost.checkKill()) {
                 remove(ghost);
-                revalidate();
                 ghosts.remove(ghost);
             }
         }

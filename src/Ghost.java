@@ -1,19 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.util.Random;
 
 class Ghost extends JLabel {
-    private ImageIcon icon;
-    private ImageIcon iconDie;
+    private final ImageIcon icon;
+    private final ImageIcon iconDie;
+    private int textShownDuration = Integer.MAX_VALUE;
     private int dx; // Change in x-coordinate
     private int dy; // Change in y-coordinate
-
     private int burn = 0;
-
     static public final int SIZE = 100;
+    private String[] mockOptions =
+            {"Cant find meeeee",
+            "Over hereeee",
+            "womp womp",
+            "Wouldn't you like to know weather boy",
+            "STOP LOOKING AT ME SWAN"};
+    private String curentMock = newMock();
 
     Ghost() {
         Image image = new ImageIcon(this.getClass().getResource("ghost.png")).getImage();
@@ -45,22 +48,36 @@ class Ghost extends JLabel {
     public boolean checkKill(){
         if(getMousePosition() != null){
             burn++;
-            if(burn > 100)
-                return true;
-            else
-                return false;
+            return burn > 100;
         }
         else
             return false;
     }
 
-    public void brightness(){
+    public void brightness(Graphics g){
         int distance = 200;
         int x = MouseInfo.getPointerInfo().getLocation().x;
         int y = MouseInfo.getPointerInfo().getLocation().y;
-        if(Math.abs(x-getX()-getWidth()/2)<distance && Math.abs(y-getY()-getHeight()/2)<distance)
+        if(Math.abs(x-getX()-getWidth()/2)<distance && Math.abs(y-getY()-getHeight()/2)<distance) {
             setIcon(icon);
-        else
+        } else {
             setIcon(iconDie);
+            mock(g);
+        }
+    }
+
+    private void mock(Graphics g){
+        if(textShownDuration < 80) {
+            textShownDuration++;
+            g.setColor(Color.BLACK);
+            g.drawString(curentMock, getX() + getWidth(), getY());
+        } else if(Math.random() < .01){
+            curentMock = newMock();
+            textShownDuration = 0;
+        }
+    }
+
+    private String newMock(){
+        return mockOptions[(int)(Math.random()*mockOptions.length)];
     }
 }
