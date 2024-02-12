@@ -36,7 +36,6 @@ public class MyPanel extends JPanel {
         } catch (InterruptedException e) {
             System.out.println(e);
         }
-
         repaint();
     }
 }
