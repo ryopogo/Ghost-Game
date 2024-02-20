@@ -9,8 +9,7 @@ import java.awt.image.BufferedImage;
 public class Main {
     public static void main(String[] args) {
 
-        Radar r = new Radar();
-        BufferedImage b = r.pixalat();
+
 
         // Create a transparent JFrame
         JFrame frame = new JFrame("BOO BUSTERS");
@@ -36,5 +35,8 @@ public class Main {
 
         // Make the frame visible
         frame.setVisible(true);
+
+        Radar r = new Radar();
+        BufferedImage b = r.greenShift();
     }
 }
