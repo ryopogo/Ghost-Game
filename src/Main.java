@@ -35,8 +35,5 @@ public class Main {
 
         // Make the frame visible
         frame.setVisible(true);
-
-        Radar r = new Radar();
-        BufferedImage b = r.greenShift();
     }
 }

@@ -20,10 +20,9 @@ public class MyPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        flashlight.draw(g);
 
-        BufferedImage bf = new Radar().greenShift();
-        g.drawImage(bf, 0, 0,null);
+        Radar.draw(g);
+        flashlight.draw(g);
 
         for(int i = 0; i < ghosts.size(); i++){
             Ghost ghost = ghosts.get(i);

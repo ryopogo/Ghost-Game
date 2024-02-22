@@ -5,18 +5,19 @@ import java.io.File;
 import java.io.IOException;
 
 public class Radar {
-    private static Robot bot;
+    private static Robot bot = null;
     private static final int pixelation = 5;
+    private static boolean once = false;
+    private static BufferedImage firstGreenImage = null;
 
-    public Radar() {
+    private Radar() {}
+
+    private static BufferedImage getScreen() {
         try {
             bot = new Robot();
         } catch(Exception e){
             System.out.println(e);
         }
-    }
-
-    private static BufferedImage getScreen() {
         BufferedImage send = null;
         Rectangle rec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
         try{
@@ -27,7 +28,7 @@ public class Radar {
         return send;
     }
 
-    private BufferedImage pixalat(){
+    static private BufferedImage pixalat(){
         BufferedImage image = getScreen();
         int width = image.getWidth();
         int height = image.getHeight();
@@ -55,7 +56,7 @@ public class Radar {
         return pixelatedImage;
     }
 
-    public BufferedImage greenShift(){
+    static private BufferedImage greenShift(){
         BufferedImage image = pixalat();
         int width = image.getWidth();
         int height = image.getHeight();
@@ -81,13 +82,28 @@ public class Radar {
         BufferedImage greenShiftImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         greenShiftImage.setRGB(0, 0, width, height, pixels, 0, width);
 
-        File outputfile = new File("src/image.png");
+        /*File outputfile = new File("src/image.png");
         try {
             ImageIO.write(greenShiftImage, "png", outputfile);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
         return greenShiftImage;
     }
+
+    public static void draw(Graphics g){
+
+        if(!once) {
+            firstGreenImage = greenShift();
+            g.drawImage(firstGreenImage, 0, 0, null);
+            once = true;
+        } else{
+            g.drawImage(firstGreenImage, 0, 0, null);
+        }
+
+    }
+
+
+
 }
