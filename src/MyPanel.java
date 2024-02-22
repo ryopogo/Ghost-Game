@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class MyPanel extends JPanel {
@@ -20,6 +21,9 @@ public class MyPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         flashlight.draw(g);
+
+        BufferedImage bf = new Radar().greenShift();
+        g.drawImage(bf, 0, 0,null);
 
         for(int i = 0; i < ghosts.size(); i++){
             Ghost ghost = ghosts.get(i);
