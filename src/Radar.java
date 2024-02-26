@@ -1,14 +1,17 @@
 import javax.imageio.ImageIO;
+import javax.print.DocFlavor;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class Radar {
     private static Robot bot = null;
     private static final int pixelation = 5;
     private static boolean once = false;
     private static BufferedImage firstGreenImage = null;
+    private static BufferedImage radar = null;
 
     private Radar() {}
 
@@ -25,13 +28,14 @@ public class Radar {
         } catch(Exception e) {
             System.out.println(e);
         }
+        radar = getRadar();
         return send;
     }
 
     static private BufferedImage pixalat(){
         BufferedImage image = getScreen();
-        int width = image.getWidth();
-        int height = image.getHeight();
+        int width = radar.getWidth();
+        int height = radar.getHeight();
         int[] pixels = new int[width * height];
         image.getRGB(0,0,width,height,pixels,0,width);
 
@@ -92,18 +96,25 @@ public class Radar {
         return greenShiftImage;
     }
 
+    private static BufferedImage getRadar(){
+        BufferedImage send = null;
+        try {
+            send = ImageIO.read(new File("src/rader.png"));
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return send;
+    }
+
     public static void draw(Graphics g){
 
         if(!once) {
             firstGreenImage = greenShift();
-            g.drawImage(firstGreenImage, 0, 0, null);
+            g.drawImage(firstGreenImage,0,0, radar.getWidth(), radar.getHeight(), null);
             once = true;
         } else{
-            g.drawImage(firstGreenImage, 0, 0, null);
+            g.drawImage(firstGreenImage, 0,0, radar.getWidth(), radar.getHeight(), null);
         }
-
+        g.drawImage(radar, 0,0,null);
     }
-
-
-
 }
