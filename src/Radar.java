@@ -12,6 +12,9 @@ public class Radar {
     private static boolean once = false;
     private static BufferedImage firstGreenImage = null;
     private static BufferedImage radar = null;
+    private static Double lower = .90;
+    private static int x = 0;
+    private static int y = 0;
 
     private Radar() {}
 
@@ -29,6 +32,10 @@ public class Radar {
             System.out.println(e);
         }
         radar = getRadar();
+        int h = radar.getHeight();
+        int w = radar.getWidth();
+        //send = send.getSubimage((int)(x-(h*lower)),y,h,w);
+        send = send.getSubimage(x,y,h,w);
         return send;
     }
 
@@ -110,10 +117,10 @@ public class Radar {
 
         if(!once) {
             firstGreenImage = greenShift();
-            g.drawImage(firstGreenImage,0,0, radar.getWidth(), radar.getHeight(), null);
+            g.drawImage(firstGreenImage,0,0, radar.getWidth(), (int)(radar.getHeight() * lower), null);
             once = true;
         } else{
-            g.drawImage(firstGreenImage, 0,0, radar.getWidth(), radar.getHeight(), null);
+            g.drawImage(firstGreenImage, 0,0, radar.getWidth(), (int)(radar.getHeight() * lower), null);
         }
         g.drawImage(radar, 0,0,null);
     }
