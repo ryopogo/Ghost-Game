@@ -12,9 +12,13 @@ public class Radar {
     private static boolean once = false;
     private static BufferedImage firstGreenImage = null;
     private static BufferedImage radar = null;
-    private static Double lower = .90;
+    private static Double lower = .68;
+    private static Double wider =.95;
+    private static int rase = 0;
     private static int x = 0;
     private static int y = 0;
+    private static int h = 0;
+    private static int w = 0;
 
     private Radar() {}
 
@@ -32,17 +36,17 @@ public class Radar {
             System.out.println(e);
         }
         radar = getRadar();
-        int h = radar.getHeight();
-        int w = radar.getWidth();
-        //send = send.getSubimage((int)(x-(h*lower)),y,h,w);
-        send = send.getSubimage(x,y,h,w);
+        h = (int)(radar.getHeight() * lower);
+        w = (int)(radar.getWidth() * wider);
+        rase = (int)(radar.getHeight()*.04);
+        send = send.getSubimage(x+(radar.getWidth()-(int)(radar.getWidth() * wider))/2,y+radar.getHeight()-(int)(radar.getHeight() * lower),w,h-rase);
         return send;
     }
 
     static private BufferedImage pixalat(){
         BufferedImage image = getScreen();
-        int width = radar.getWidth();
-        int height = radar.getHeight();
+        int width = image.getWidth();
+        int height = image.getHeight();
         int[] pixels = new int[width * height];
         image.getRGB(0,0,width,height,pixels,0,width);
 
@@ -114,13 +118,12 @@ public class Radar {
     }
 
     public static void draw(Graphics g){
-
         if(!once) {
             firstGreenImage = greenShift();
-            g.drawImage(firstGreenImage,0,0, radar.getWidth(), (int)(radar.getHeight() * lower), null);
+            g.drawImage(firstGreenImage,x+radar.getWidth()-(int)(radar.getWidth() * wider),y+radar.getHeight()-(int)(radar.getHeight() * lower),w,h, null);
             once = true;
         } else{
-            g.drawImage(firstGreenImage, 0,0, radar.getWidth(), (int)(radar.getHeight() * lower), null);
+            g.drawImage(firstGreenImage, x+(radar.getWidth()-(int)(radar.getWidth() * wider))/2,y+radar.getHeight()-(int)(radar.getHeight() * lower),w,h - rase, null);
         }
         g.drawImage(radar, 0,0,null);
     }

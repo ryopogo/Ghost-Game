@@ -34,7 +34,7 @@ public class MyPanel extends JPanel {
         }
 
         try {
-            Thread.sleep(10);
+            Thread.sleep(16);//62.5 fps
         } catch (InterruptedException e) {
             System.out.println(e);
         }
