@@ -13,8 +13,8 @@ public class Radar {
     private static final Double topCropPercent = .68;
     private static final Double widthCropPercent =.95;
     private static int bottomCropPercent = 0;
-    private static int x = 100;
-    private static int y = 100;
+    private static final int x = 0;
+    private static final int y = 0;
     private static int h = 0;
     private static int w = 0;
 
@@ -34,10 +34,11 @@ public class Radar {
             System.out.println(e);
         }
         radar = getRadar();
-        h = (int)(radar.getHeight() * topCropPercent);
-        w = (int)(radar.getWidth() * widthCropPercent);
+        h = radar.getHeight();
+        w = radar.getWidth();
         bottomCropPercent = (int)(radar.getHeight()*.04);
-        send = send.getSubimage(x+(radar.getWidth()-(int)(radar.getWidth() * widthCropPercent))/2,y+radar.getHeight()-(int)(radar.getHeight() * topCropPercent),w,h- bottomCropPercent);
+        assert send != null;
+        send = send.getSubimage(x + (radar.getWidth() - (int) (radar.getWidth() * widthCropPercent)) / 2, y + radar.getHeight() - (int) (radar.getHeight() * topCropPercent), (int) (w * widthCropPercent), (int) (h * topCropPercent) - bottomCropPercent);
         return send;
     }
 
@@ -94,14 +95,6 @@ public class Radar {
         // Create a new BufferedImage with the modified pixel data
         BufferedImage greenShiftImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         greenShiftImage.setRGB(0, 0, width, height, pixels, 0, width);
-
-        /*File outputfile = new File("src/image.png");
-        try {
-            ImageIO.write(greenShiftImage, "png", outputfile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
-
         return greenShiftImage;
     }
 
@@ -120,7 +113,7 @@ public class Radar {
             firstGreenImage = greenShift();
             once = true;
         } else{
-            g.drawImage(firstGreenImage, x+(radar.getWidth()-(int)(radar.getWidth() * widthCropPercent))/2,y+radar.getHeight()-(int)(radar.getHeight() * topCropPercent),w,h - bottomCropPercent, null);
+            g.drawImage(firstGreenImage, x+(w-(int)(w * widthCropPercent))/2,y+h-(int)(h * topCropPercent),(int)(w * widthCropPercent),(int)(h*topCropPercent)- bottomCropPercent, null);
         }
         g.drawImage(radar, x,y,null);
     }

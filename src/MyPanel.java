@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class MyPanel extends JPanel {
     static final private ArrayList<Ghost> ghosts = new ArrayList<>();
-    static final private FlashLight flashlight = new FlashLight();
 
     public MyPanel() {
         setOpaque(false); // Make the panel transparent
@@ -21,7 +20,7 @@ public class MyPanel extends JPanel {
         super.paintComponent(g);
 
         Radar.draw(g);
-        flashlight.draw(g);
+        FlashLight.draw(g);
 
         for(int i = 0; i < ghosts.size(); i++){
             Ghost ghost = ghosts.get(i);
