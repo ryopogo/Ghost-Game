@@ -1,10 +1,8 @@
 import javax.imageio.ImageIO;
-import javax.print.DocFlavor;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 public class Radar {
     private static Robot bot = null;
@@ -12,11 +10,11 @@ public class Radar {
     private static boolean once = false;
     private static BufferedImage firstGreenImage = null;
     private static BufferedImage radar = null;
-    private static Double lower = .68;
-    private static Double wider =.95;
-    private static int rase = 0;
-    private static int x = 0;
-    private static int y = 0;
+    private static final Double topCropPercent = .68;
+    private static final Double widthCropPercent =.95;
+    private static int bottomCropPercent = 0;
+    private static int x = 100;
+    private static int y = 100;
     private static int h = 0;
     private static int w = 0;
 
@@ -36,10 +34,10 @@ public class Radar {
             System.out.println(e);
         }
         radar = getRadar();
-        h = (int)(radar.getHeight() * lower);
-        w = (int)(radar.getWidth() * wider);
-        rase = (int)(radar.getHeight()*.04);
-        send = send.getSubimage(x+(radar.getWidth()-(int)(radar.getWidth() * wider))/2,y+radar.getHeight()-(int)(radar.getHeight() * lower),w,h-rase);
+        h = (int)(radar.getHeight() * topCropPercent);
+        w = (int)(radar.getWidth() * widthCropPercent);
+        bottomCropPercent = (int)(radar.getHeight()*.04);
+        send = send.getSubimage(x+(radar.getWidth()-(int)(radar.getWidth() * widthCropPercent))/2,y+radar.getHeight()-(int)(radar.getHeight() * topCropPercent),w,h- bottomCropPercent);
         return send;
     }
 
@@ -120,11 +118,23 @@ public class Radar {
     public static void draw(Graphics g){
         if(!once) {
             firstGreenImage = greenShift();
-            g.drawImage(firstGreenImage,x+radar.getWidth()-(int)(radar.getWidth() * wider),y+radar.getHeight()-(int)(radar.getHeight() * lower),w,h, null);
             once = true;
         } else{
-            g.drawImage(firstGreenImage, x+(radar.getWidth()-(int)(radar.getWidth() * wider))/2,y+radar.getHeight()-(int)(radar.getHeight() * lower),w,h - rase, null);
+            g.drawImage(firstGreenImage, x+(radar.getWidth()-(int)(radar.getWidth() * widthCropPercent))/2,y+radar.getHeight()-(int)(radar.getHeight() * topCropPercent),w,h - bottomCropPercent, null);
         }
-        g.drawImage(radar, 0,0,null);
+        g.drawImage(radar, x,y,null);
+    }
+
+    public static int getX(){
+        return x;
+    }
+    public static int getY(){
+        return y;
+    }
+    public static int getH(){
+        return h;
+    }
+    public static int getW(){
+        return w;
     }
 }
