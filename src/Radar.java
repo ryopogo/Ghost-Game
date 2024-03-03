@@ -5,40 +5,41 @@ import java.io.File;
 import java.io.IOException;
 
 public class Radar {
-    private static Robot bot = null;
-    private static final int pixelation = 5;
+    private static final Robot BOT;
+
+    static {
+        try {
+            BOT = new Robot();
+        } catch (AWTException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final int PIXELATION = 5;
     private static boolean once = false;
     private static BufferedImage firstGreenImage = null;
-    private static BufferedImage radar = null;
-    private static final Double topCropPercent = .68;
-    private static final Double widthCropPercent =.95;
-    private static int bottomCropPercent = 0;
+    private static final BufferedImage RADAR_IMAGE = getRadarImage();
+    private static final Double TOP_CROP_PERCENT = .68;
+    private static final Double WIDTH_CROP_PERCENT =.95;
+    private static final double BOTTOM_CROP_PERCENT = .04;
     private static final int x = 0;
-    private static final int y = 0;
-    private static int h = 0;
-    private static int w = 0;
+    private static final int y = 0; // not capped because you might be able to move the rader later
+    private static final int H = RADAR_IMAGE.getHeight();
+    private static final int W = RADAR_IMAGE.getWidth();;
+    private static final int BOTTOM_CROP = (int)(H * BOTTOM_CROP_PERCENT);
+    private static final int xOffSet = (RADAR_IMAGE.getWidth() - (int) (RADAR_IMAGE.getWidth() * WIDTH_CROP_PERCENT)) / 2;
+    private static final int yOffset = RADAR_IMAGE.getHeight() - (int) (RADAR_IMAGE.getHeight() * TOP_CROP_PERCENT);
 
     private Radar() {}
 
     private static BufferedImage getScreen() {
-        try {
-            bot = new Robot();
-        } catch(Exception e){
-            System.out.println(e);
-        }
         BufferedImage send = null;
         Rectangle rec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-        try{
-            send = bot.createScreenCapture(rec);
-        } catch(Exception e) {
-            System.out.println(e);
-        }
-        radar = getRadar();
-        h = radar.getHeight();
-        w = radar.getWidth();
-        bottomCropPercent = (int)(radar.getHeight()*.04);
+        send = BOT.createScreenCapture(rec);
+        getRadarImage();
+        int bottomCrop = (int)(H * BOTTOM_CROP_PERCENT);
         assert send != null;
-        send = send.getSubimage(x + (radar.getWidth() - (int) (radar.getWidth() * widthCropPercent)) / 2, y + radar.getHeight() - (int) (radar.getHeight() * topCropPercent), (int) (w * widthCropPercent), (int) (h * topCropPercent) - bottomCropPercent);
+        send = send.getSubimage(x + xOffSet, y + yOffset, (int) (W * WIDTH_CROP_PERCENT), (int) (H * TOP_CROP_PERCENT) - bottomCrop);
         return send;
     }
 
@@ -49,11 +50,11 @@ public class Radar {
         int[] pixels = new int[width * height];
         image.getRGB(0,0,width,height,pixels,0,width);
 
-        for(int y = 0; y < height;y+=pixelation){
-            for(int x = 0; x < width;x+=pixelation){
+        for(int y = 0; y < height;y+= PIXELATION){
+            for(int x = 0; x < width;x+= PIXELATION){
                 int pixel = pixels[y * width + x];
-                for(int blockY = 0; blockY < pixelation;blockY++){
-                    for(int blockX = 0; blockX < pixelation;blockX++){
+                for(int blockY = 0; blockY < PIXELATION; blockY++){
+                    for(int blockX = 0; blockX < PIXELATION; blockX++){
                         int currentY = y + blockY;
                         int currentX = x + blockX;
                         if(currentY < height && currentX < width){
@@ -98,12 +99,12 @@ public class Radar {
         return greenShiftImage;
     }
 
-    private static BufferedImage getRadar(){
+    private static BufferedImage getRadarImage(){
         BufferedImage send = null;
         try {
             send = ImageIO.read(new File("src/rader.png"));
         } catch (IOException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
         return send;
     }
@@ -113,21 +114,8 @@ public class Radar {
             firstGreenImage = greenShift();
             once = true;
         } else{
-            g.drawImage(firstGreenImage, x+(w-(int)(w * widthCropPercent))/2,y+h-(int)(h * topCropPercent),(int)(w * widthCropPercent),(int)(h*topCropPercent)- bottomCropPercent, null);
+            g.drawImage(firstGreenImage, x+(W -(int)(W * WIDTH_CROP_PERCENT))/2,y+ H -(int)(H * TOP_CROP_PERCENT),(int)(W * WIDTH_CROP_PERCENT),(int)(H * TOP_CROP_PERCENT)- BOTTOM_CROP, null);
         }
-        g.drawImage(radar, x,y,null);
-    }
-
-    public static int getX(){
-        return x;
-    }
-    public static int getY(){
-        return y;
-    }
-    public static int getH(){
-        return h;
-    }
-    public static int getW(){
-        return w;
+        g.drawImage(RADAR_IMAGE, x,y,null);
     }
 }

@@ -9,9 +9,6 @@ public class MyPanel extends JPanel {
         setOpaque(false); // Make the panel transparent
         for(int i = 0; i<10;i++)
             ghosts.add(new Ghost());
-        for(Ghost ghost: ghosts){
-            add(ghost);
-        }
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
     }
 
@@ -24,10 +21,9 @@ public class MyPanel extends JPanel {
 
         for(int i = 0; i < ghosts.size(); i++){
             Ghost ghost = ghosts.get(i);
-            ghost.move();
+            ghost.move(g);
             ghost.brightness(g);
             if(ghost.checkKill()) {
-                remove(ghost);
                 ghosts.remove(ghost);
             }
         }
