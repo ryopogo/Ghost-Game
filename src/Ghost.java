@@ -50,7 +50,7 @@ class Ghost {
         dy = random.nextInt(5)+1;
     }
 
-    void move(Graphics g) {
+    protected void move(Graphics g) {
         // Check screen boundaries
         if (x < 0 || x + GHOST_SCALED_W > screenDimensions.getWidth()) {
             dx = -dx; // Reverse x-direction
@@ -65,7 +65,7 @@ class Ghost {
     }
     public boolean checkKill(){
         Point location = MouseInfo.getPointerInfo().getLocation();
-        if(x < location.x && location.x < x+GHOST_SCALED_W && y < location.y && location.y < y+GHOST_SCALED_H){
+        if(!hiding && x < location.x && location.x < x+GHOST_SCALED_W && y < location.y && location.y < y+GHOST_SCALED_H){
             burn++;
             if(burn > 80)
                 dying = true;
@@ -87,7 +87,7 @@ class Ghost {
         }
     }
 
-    private void mock(Graphics g){
+    protected void mock(Graphics g){
         if(textShownDuration < 80) {
             textShownDuration++;
             g.setColor(Color.BLACK);

@@ -8,9 +8,6 @@ import java.awt.image.BufferedImage;
 
 public class Main {
     public static void main(String[] args) {
-
-
-
         // Create a transparent JFrame
         JFrame frame = new JFrame("BOO BUSTERS");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
