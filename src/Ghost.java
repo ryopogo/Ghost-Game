@@ -15,24 +15,26 @@ class Ghost {
         }
     }
     private static final double GHOST_RATIO = (double) GHOST_IMAGE.getHeight()/ GHOST_IMAGE.getWidth();
-    private static final BufferedImage GHOST_HIDE_IMAGE;
+    private static final BufferedImage GHOST_DYING_IMAGE;
     static {
         try {
-            GHOST_HIDE_IMAGE = ImageIO.read(new File("src/ghost hide.png"));
+            GHOST_DYING_IMAGE = ImageIO.read(new File("src/ghost dying.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     private static int instances;
+    private static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
     private int textShownDuration = Integer.MAX_VALUE;
-    private int y = 6;
-    private int x = ++instances * GHOST_SCALED_W;
+    private int y = (int) (++instances * GHOST_SCALED_W / (screenDimensions.getWidth() - GHOST_SCALED_W))*GHOST_SCALED_H;
+    private int x = (int) (++instances * GHOST_SCALED_W % (screenDimensions.getWidth() - GHOST_SCALED_W));
     private int dx;
     private int dy;
     private int burn = 0;
-    private static final int GHOST_SCALED_W = 150;
+    private static final int GHOST_SCALED_W = 130;
     private static final int GHOST_SCALED_H = (int)(GHOST_SCALED_W * GHOST_RATIO);
-    private static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+    private boolean hiding = true;
+    private boolean dying = false;
     private static final String[] MOCK_OPTIONS =
             {"Cant find meeeee",
             "Over hereeee",
@@ -49,8 +51,6 @@ class Ghost {
     }
 
     void move(Graphics g) {
-        // Update label position
-
         // Check screen boundaries
         if (x < 0 || x + GHOST_SCALED_W > screenDimensions.getWidth()) {
             dx = -dx; // Reverse x-direction
@@ -60,26 +60,29 @@ class Ghost {
         }
         x += dx;
         y += dy;
-        g.drawImage(GHOST_IMAGE,x,y,GHOST_SCALED_W,GHOST_SCALED_H,null);
+        if(!hiding)
+            g.drawImage((dying)?GHOST_DYING_IMAGE:GHOST_IMAGE,x,y,GHOST_SCALED_W,GHOST_SCALED_H,null);
     }
     public boolean checkKill(){
         Point location = MouseInfo.getPointerInfo().getLocation();
         if(x < location.x && location.x < x+GHOST_SCALED_W && y < location.y && location.y < y+GHOST_SCALED_H){
             burn++;
+            if(burn > 80)
+                dying = true;
             return burn > 100;
         }
         else
             return false;
     }
 
-    public void brightness(Graphics g){
+    public void checkHide(Graphics g){
         int distance = 200;
         int pointerX = MouseInfo.getPointerInfo().getLocation().x;
         int pointerY = MouseInfo.getPointerInfo().getLocation().y;
         if(Math.abs(pointerX-x-GHOST_SCALED_W/2)<distance && Math.abs(pointerY-y-GHOST_SCALED_H/2)<distance) {
-            //setIcon(icon);
+            hiding = false;
         } else {
-            //setIcon(iconDie);
+            hiding = true;
             mock(g);
         }
     }

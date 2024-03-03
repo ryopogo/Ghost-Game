@@ -3,12 +3,15 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MyPanel extends JPanel {
-    static final private ArrayList<Ghost> ghosts = new ArrayList<>();
+    static final private ArrayList<Ghost> GHOSTS = new ArrayList<>();
+    static final private ArrayList<RadarGhost> LANG_GHOSTS = new ArrayList<>();
 
     public MyPanel() {
         setOpaque(false); // Make the panel transparent
-        for(int i = 0; i<10;i++)
-            ghosts.add(new Ghost());
+        for(int i = 0; i<0;i++)
+            GHOSTS.add(new Ghost());
+        for(int i = 0; i<4;i++)
+            LANG_GHOSTS.add(new RadarGhost());
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
     }
 
@@ -19,12 +22,20 @@ public class MyPanel extends JPanel {
         Radar.draw(g);
         FlashLight.draw(g);
 
-        for(int i = 0; i < ghosts.size(); i++){
-            Ghost ghost = ghosts.get(i);
+        for(int i = 0; i < GHOSTS.size(); i++){
+            Ghost ghost = GHOSTS.get(i);
             ghost.move(g);
-            ghost.brightness(g);
+            ghost.checkHide(g);
             if(ghost.checkKill()) {
-                ghosts.remove(ghost);
+                GHOSTS.remove(ghost);
+            }
+        }
+        for(int i = 0; i < LANG_GHOSTS.size(); i++){
+            Ghost ghost = LANG_GHOSTS.get(i);
+            ghost.move(g);
+            ghost.checkHide(g);
+            if(ghost.checkKill()) {
+                LANG_GHOSTS.remove(ghost);
             }
         }
 
