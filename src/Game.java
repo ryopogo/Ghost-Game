@@ -4,12 +4,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class MyPanel extends JPanel {
+public class Game extends JPanel {
     static final private ArrayList<Ghost> GHOSTS = new ArrayList<>();
     static final private ArrayList<RadarGhost> LANG_GHOSTS = new ArrayList<>();
     private static boolean pause = false;
 
-    public MyPanel() {
+    public Game() {
+        setBounds(0,0,Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height );
         setOpaque(false); // Make the panel transparent
         for (int i = 0; i < 10; i++)
             GHOSTS.add(new Ghost());

@@ -17,8 +17,7 @@ public class Main {
         // Set the frame size to match the screen resolution
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width, screenSize.height);
-        // Add the label to the content pane
-        frame.add(new MyPanel());
+        frame.add(new HomeScreen(frame),0);
 
         String imagePath = "src/ghost.png";
         Image ghost = null;
