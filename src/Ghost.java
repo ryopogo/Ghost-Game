@@ -24,17 +24,17 @@ class Ghost {
         }
     }
     private static int instances;
-    private static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+    protected static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
     private int textShownDuration = Integer.MAX_VALUE;
-    private int y = (int) (++instances * GHOST_SCALED_W / (screenDimensions.getWidth() - GHOST_SCALED_W))*GHOST_SCALED_H;
-    private int x = (int) (++instances * GHOST_SCALED_W % (screenDimensions.getWidth() - GHOST_SCALED_W));
-    private int dx;
-    private int dy;
-    private int burn = 0;
-    private static final int GHOST_SCALED_W = 130;
-    private static final int GHOST_SCALED_H = (int)(GHOST_SCALED_W * GHOST_RATIO);
-    private boolean hiding = true;
-    private boolean dying = false;
+    protected int y = (int) (++instances * GHOST_SCALED_W / (screenDimensions.getWidth() - GHOST_SCALED_W))*GHOST_SCALED_H;
+    protected int x = (int) (++instances * GHOST_SCALED_W % (screenDimensions.getWidth() - GHOST_SCALED_W));
+    protected int dx;
+    protected int dy;
+    protected int burn = 0;
+    protected static final int GHOST_SCALED_W = 100;
+    protected static final int GHOST_SCALED_H = (int)(GHOST_SCALED_W * GHOST_RATIO);
+    protected boolean hiding = true;
+    protected boolean dying = false;
     private static final String[] MOCK_OPTIONS =
             {"Cant find meeeee",
             "Over hereeee",

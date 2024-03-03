@@ -23,9 +23,9 @@ public class Radar {
     private static final Double WIDTH_CROP_PERCENT =.95;
     private static final double BOTTOM_CROP_PERCENT = .04;
     private static final int x = 0;
-    private static final int y = 0; // not capped because you might be able to move the rader later
+    private static final int y = 0; // not capped because you might be able to move the radar later
     private static final int H = RADAR_IMAGE.getHeight();
-    private static final int W = RADAR_IMAGE.getWidth();;
+    private static final int W = RADAR_IMAGE.getWidth();
     private static final int BOTTOM_CROP = (int)(H * BOTTOM_CROP_PERCENT);
     private static final int xOffSet = (RADAR_IMAGE.getWidth() - (int) (RADAR_IMAGE.getWidth() * WIDTH_CROP_PERCENT)) / 2;
     private static final int yOffset = RADAR_IMAGE.getHeight() - (int) (RADAR_IMAGE.getHeight() * TOP_CROP_PERCENT);
@@ -33,7 +33,7 @@ public class Radar {
     private Radar() {}
 
     private static BufferedImage getScreen() {
-        BufferedImage send = null;
+        BufferedImage send;
         Rectangle rec = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
         send = BOT.createScreenCapture(rec);
         getRadarImage();
@@ -100,22 +100,43 @@ public class Radar {
     }
 
     private static BufferedImage getRadarImage(){
-        BufferedImage send = null;
+        BufferedImage send;
         try {
-            send = ImageIO.read(new File("src/rader.png"));
+            send = ImageIO.read(new File("src/radar.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return send;
     }
 
-    public static void draw(Graphics g){
+    public static void drawScreen(Graphics g){
         if(!once) {
             firstGreenImage = greenShift();
             once = true;
         } else{
             g.drawImage(firstGreenImage, x+(W -(int)(W * WIDTH_CROP_PERCENT))/2,y+ H -(int)(H * TOP_CROP_PERCENT),(int)(W * WIDTH_CROP_PERCENT),(int)(H * TOP_CROP_PERCENT)- BOTTOM_CROP, null);
         }
+    }
+    public static void drawFrame(Graphics g){
         g.drawImage(RADAR_IMAGE, x,y,null);
+    }
+    public static int getX(){
+        return x;
+    }
+    public static int getXOffSet(){
+        return xOffSet;
+    }
+    public static int getY(){
+        return y;
+    }
+    public static int getYOffSet(){
+        return yOffset;
+    }
+    public static int getWidth(){
+        return x + (int) (W * WIDTH_CROP_PERCENT);
+    }
+    public static int getHight(){
+        return y + (int) (H * TOP_CROP_PERCENT) - (int)(H * BOTTOM_CROP_PERCENT);
+
     }
 }

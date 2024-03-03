@@ -8,9 +8,9 @@ public class MyPanel extends JPanel {
 
     public MyPanel() {
         setOpaque(false); // Make the panel transparent
-        for(int i = 0; i<0;i++)
+        for(int i = 0; i<10;i++)
             GHOSTS.add(new Ghost());
-        for(int i = 0; i<4;i++)
+        for(int i = 0; i<10;i++)
             LANG_GHOSTS.add(new RadarGhost());
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
     }
@@ -19,8 +19,19 @@ public class MyPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Radar.draw(g);
+        Radar.drawScreen(g);
         FlashLight.draw(g);
+
+        for(int i = 0; i < LANG_GHOSTS.size(); i++){
+            Ghost ghost = LANG_GHOSTS.get(i);
+            ghost.move(g);
+            ghost.checkHide(g);
+            if(ghost.checkKill()) {
+                LANG_GHOSTS.remove(ghost);
+            }
+        }
+
+        Radar.drawFrame(g);
 
         for(int i = 0; i < GHOSTS.size(); i++){
             Ghost ghost = GHOSTS.get(i);
@@ -28,14 +39,6 @@ public class MyPanel extends JPanel {
             ghost.checkHide(g);
             if(ghost.checkKill()) {
                 GHOSTS.remove(ghost);
-            }
-        }
-        for(int i = 0; i < LANG_GHOSTS.size(); i++){
-            Ghost ghost = LANG_GHOSTS.get(i);
-            ghost.move(g);
-            ghost.checkHide(g);
-            if(ghost.checkKill()) {
-                LANG_GHOSTS.remove(ghost);
             }
         }
 
