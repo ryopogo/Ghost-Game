@@ -8,10 +8,12 @@ public class Game extends JPanel {
     static final private ArrayList<Ghost> GHOSTS = new ArrayList<>();
     static final private ArrayList<RadarGhost> LANG_GHOSTS = new ArrayList<>();
     private static boolean pause = false;
+    PauseMenu pm = new PauseMenu(this);
+
 
     public Game() {
-        setBounds(0,0,Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height );
         setOpaque(false); // Make the panel transparent
+        setLayout(null);
         for (int i = 0; i < 10; i++)
             GHOSTS.add(new Ghost());
         for (int i = 0; i < 10; i++)
@@ -25,7 +27,11 @@ public class Game extends JPanel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) pause = !pause;
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    pause = !pause;
+                    pm.state();
+                }
+
             }
 
             @Override
