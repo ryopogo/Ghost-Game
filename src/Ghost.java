@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,6 +43,7 @@ class Ghost {
             "Wouldn't you like to know weather boy",
             "STOP LOOKING AT ME SWAN"};
     private String currentMock = newMock();
+    protected String audioFilePath = "src/ghost burn.wav";
 
     Ghost() {
         // Set random initial movement direction
@@ -67,8 +69,14 @@ class Ghost {
         Point location = MouseInfo.getPointerInfo().getLocation();
         if(!hiding && x < location.x && location.x < x+GHOST_SCALED_W && y < location.y && location.y < y+GHOST_SCALED_H){
             burn++;
-            if(burn > 80)
+            if(burn > 60) {
+                if(!dying) {
+                    dx = dx*2;
+                    dy = dy*2;
+                    playAudio(audioFilePath);
+                }
                 dying = true;
+            }
             return burn > 100;
         }
         else
@@ -100,5 +108,39 @@ class Ghost {
 
     private String newMock(){
         return MOCK_OPTIONS[(int)(Math.random()* MOCK_OPTIONS.length)];
+    }
+
+    public static void playAudio(String filePath) {
+        File audioFile = new File(filePath);
+
+        Thread thread = new Thread(() -> {
+            if (!audioFile.exists()) {
+                System.out.println("Audio file not found: " + filePath);
+                return;
+            }
+            AudioInputStream audioStream = null;
+            try {
+                audioStream = AudioSystem.getAudioInputStream(audioFile);
+                Clip clip = null;
+                clip = AudioSystem.getClip();
+                clip.open(audioStream);
+
+                System.out.println("Playing audio...");
+
+                clip.start();
+
+                // Wait for the audio to finish playing
+                while (!clip.isRunning()) {
+                    Thread.yield();
+                }
+                while (clip.isRunning()) {
+                    Thread.yield();
+                }
+
+                clip.close();
+                audioStream.close();
+            } catch (Exception ignored){}
+        });
+        thread.start();
     }
 }
