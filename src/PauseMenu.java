@@ -6,14 +6,10 @@ import java.awt.event.ActionListener;
 public class PauseMenu {
     private static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
     static private JButton exit;
+    static private JButton MainMenu;
     public PauseMenu(JPanel p){
         exit = makeButton(p,"Exit", 4);
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        exit.addActionListener(e -> System.exit(0));
     }
     static public void state(){
         exit.setVisible(!exit.isVisible());
