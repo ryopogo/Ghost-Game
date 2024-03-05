@@ -17,7 +17,7 @@ public class Game extends JPanel {
     FileWriter fileWriter;
     {
         try {
-            fileWriter = new FileWriter("src/highScore.txt");
+            fileWriter = new FileWriter("src/highScore.txt", true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
