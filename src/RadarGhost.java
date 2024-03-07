@@ -37,8 +37,8 @@ public class RadarGhost extends Ghost{
             throw new RuntimeException(e);
         }
     }
-    public RadarGhost(){
-        super();
+    public RadarGhost(int instance){
+        super(instance);
         super.audioFilePath = "";
     }
     @Override

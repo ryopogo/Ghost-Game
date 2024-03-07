@@ -10,7 +10,7 @@ public class HomeScreen extends JPanel {
     private static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
     private static double time = 0;
     private static String score;
-    public HomeScreen(JFrame frame) {
+    public HomeScreen() {
         setOpaque(false);
         setLayout(null);
         JButton button = new JButton("Start Game");
@@ -33,16 +33,12 @@ public class HomeScreen extends JPanel {
         button.setLocation(xPosition, yPosition);
         add(button);
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button Clicked!");
-                // Replace MyPanel with your panel class
-                frame.getContentPane().removeAll();
-                frame.getContentPane().add(new Game());
-                frame.revalidate();
-                frame.repaint();
-            }
+        button.addActionListener(e -> {
+            JFrame frame = Main.getFrame();
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(Game.getInstance());
+            frame.revalidate();
+            frame.repaint();
         });
 
         button.setVisible(true);

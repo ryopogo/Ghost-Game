@@ -27,8 +27,8 @@ class Ghost {
     private static int instances;
     protected static final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
     private int textShownDuration = Integer.MAX_VALUE;
-    protected int y = (int) (++instances * GHOST_SCALED_W / (screenDimensions.getWidth() - GHOST_SCALED_W))*GHOST_SCALED_H;
-    protected int x = (int) (++instances * GHOST_SCALED_W % (screenDimensions.getWidth() - GHOST_SCALED_W));
+    protected int y;
+    protected int x;
     protected int dx;
     protected int dy;
     protected int burn = 0;
@@ -45,7 +45,9 @@ class Ghost {
     private String currentMock = newMock();
     protected String audioFilePath = "src/ghost burn.wav";
 
-    Ghost() {
+    Ghost(int instance) {
+        y = (int) (instance * GHOST_SCALED_W / (screenDimensions.getWidth() - GHOST_SCALED_W))*GHOST_SCALED_H;
+        x = (int) (instance * GHOST_SCALED_W % (screenDimensions.getWidth() - GHOST_SCALED_W));
         // Set random initial movement direction
         Random random = new Random();
         dx = random.nextInt(5)+1; // Random value between 1 and 6
@@ -124,8 +126,6 @@ class Ghost {
                 Clip clip = null;
                 clip = AudioSystem.getClip();
                 clip.open(audioStream);
-
-                System.out.println("Playing audio...");
 
                 clip.start();
 

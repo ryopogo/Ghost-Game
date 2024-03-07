@@ -10,36 +10,34 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game extends JPanel {
-    static final private ArrayList<Ghost> GHOSTS = new ArrayList<>();
-    static final private ArrayList<RadarGhost> LANG_GHOSTS = new ArrayList<>();
-    private static boolean pause = false;
-    PauseMenu pm = new PauseMenu(this);
-    FileWriter fileWriter;
-    {
-        try {
-            fileWriter = new FileWriter("src/highScore.txt", true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    Scanner sc;
-    {
+    static private ArrayList<Ghost> ghosts;
+    static private ArrayList<RadarGhost> langGhosts;
+    private static boolean pause;
+    private static Scanner sc;
+
+    private static int oldScore;
+    private static int score;
+    private static Game THIS = new Game();
+
+    private Game() {
         try {
             sc = new Scanner(new File("src/highScore.txt"));
-    } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
+        PauseMenu.add(this);
+        langGhosts = new ArrayList<>();
+        ghosts = new ArrayList<>();
+        score = 0;
+        pause = false;
+        oldScore = sc.nextInt();
 
-
-
-    public Game() {
         setOpaque(false); // Make the panel transparent
         setLayout(null);
         for (int i = 0; i < 10; i++)
-            GHOSTS.add(new Ghost());
+            ghosts.add(new Ghost(i));
         for (int i = 0; i < 10; i++)
-            LANG_GHOSTS.add(new RadarGhost());
+            langGhosts.add(new RadarGhost(i));
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         KeyListener kl = new KeyListener() {
             @Override
@@ -51,7 +49,7 @@ public class Game extends JPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     pause = !pause;
-                    pm.state();
+                    PauseMenu.state();
                 }
 
             }
@@ -74,27 +72,30 @@ public class Game extends JPanel {
         FlashLight.draw(g);
         Radar.drawFrame(g);
         if (!pause) {
-            for (int i = 0; i < LANG_GHOSTS.size(); i++) {
-                Ghost ghost = LANG_GHOSTS.get(i);
+            for (int i = 0; i < langGhosts.size(); i++) {
+                Ghost ghost = langGhosts.get(i);
                 ghost.move(g);
                 ghost.checkHide(g);
                 if (ghost.checkKill()) {
-                    LANG_GHOSTS.remove(ghost);
+                    langGhosts.remove(ghost);
                 }
             }
 
-            for (int i = 0; i < GHOSTS.size(); i++) {
-                Ghost ghost = GHOSTS.get(i);
+            for (int i = 0; i < ghosts.size(); i++) {
+                Ghost ghost = ghosts.get(i);
                 ghost.move(g);
                 ghost.checkHide(g);
                 if (ghost.checkKill()) {
-                    GHOSTS.remove(ghost);
-                    int score = Integer.parseInt(sc.nextLine());
-                    try {
-                        fileWriter.write( score + 2);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    ghosts.remove(ghost);
+                    score += 2;
+                    if(oldScore < score)
+                        try {
+                            FileWriter fileWriter = new FileWriter("src/highScore.txt", false);
+                            fileWriter.write(Integer.toString(score));
+                            fileWriter.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                 }
             }
         }
@@ -106,5 +107,15 @@ public class Game extends JPanel {
             throw new RuntimeException(e);
         }
         repaint();
+    }
+
+    public static int getScore(){
+        return score;
+    }
+    public static Game getInstance(){
+        return THIS;
+    }
+    public static void restartGame(){
+        THIS = new Game();
     }
 }
