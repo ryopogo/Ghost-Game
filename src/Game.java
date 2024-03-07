@@ -78,6 +78,7 @@ public class Game extends JPanel {
                 ghost.checkHide(g);
                 if (ghost.checkKill()) {
                     langGhosts.remove(ghost);
+                    addScore(4);
                 }
             }
 
@@ -87,15 +88,7 @@ public class Game extends JPanel {
                 ghost.checkHide(g);
                 if (ghost.checkKill()) {
                     ghosts.remove(ghost);
-                    score += 2;
-                    if(oldScore < score)
-                        try {
-                            FileWriter fileWriter = new FileWriter("src/highScore.txt", false);
-                            fileWriter.write(Integer.toString(score));
-                            fileWriter.close();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                    addScore(2);
                 }
             }
         }
@@ -107,6 +100,17 @@ public class Game extends JPanel {
             throw new RuntimeException(e);
         }
         repaint();
+    }
+    private static void addScore(int add){
+        score += add;
+        if(oldScore < score)
+            try {
+                FileWriter fileWriter = new FileWriter("src/highScore.txt", false);
+                fileWriter.write(Integer.toString(score));
+                fileWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
     }
 
     public static int getScore(){

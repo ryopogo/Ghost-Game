@@ -31,6 +31,7 @@ class Ghost {
     protected int x;
     protected int dx;
     protected int dy;
+    protected int dChang = 2;
     protected int burn = 0;
     protected static final int GHOST_SCALED_W = 100;
     protected static final int GHOST_SCALED_H = (int)(GHOST_SCALED_W * GHOST_RATIO);
@@ -73,8 +74,8 @@ class Ghost {
             burn++;
             if(burn > 60) {
                 if(!dying) {
-                    dx = dx*2;
-                    dy = dy*2;
+                    dx = dx*dChang;
+                    dy = dy*dChang;
                     playAudio(audioFilePath);
                 }
                 dying = true;

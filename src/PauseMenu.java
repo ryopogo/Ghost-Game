@@ -28,6 +28,7 @@ public class PauseMenu {
     }
     static public void state(){
         components.forEach(e -> e.setVisible(!e.isVisible()));
+        updateFont(Score,"Current Score: " + Game.getScore());
         Score.setText("Current Score: " + Game.getScore());
     }
     static private JButton makeButton(JPanel p, String name, int positionNum, int positionDenom){
@@ -53,13 +54,9 @@ public class PauseMenu {
         return button;
     }
     static private JLabel makeLabel(JPanel p, String name, int positionNum, int positionDenom){
-        JLabel label = new JLabel(name);
+        JLabel label = new JLabel();
         label.setForeground(Color.BLACK);
-        Font originalFont = label.getFont();
-        Font biggerFont = originalFont.deriveFont(Font.BOLD, 36); // You can adjust the size and style
-        label.setFont(biggerFont);
-        FontMetrics fontMetrics = label.getFontMetrics(biggerFont);
-        label.setSize(fontMetrics.stringWidth(name), fontMetrics.getHeight());
+        updateFont(label,name);
         p.add(label);
 
         int screenWidth = screenDimensions.width;
@@ -74,5 +71,12 @@ public class PauseMenu {
         p.add(label);
         label.setVisible(false);
         return label;
+    }
+    private static void updateFont(JLabel label, String name){
+        Font originalFont = label.getFont();
+        Font biggerFont = originalFont.deriveFont(Font.BOLD, 36); // You can adjust the size and style
+        label.setFont(biggerFont);
+        FontMetrics fontMetrics = label.getFontMetrics(biggerFont);
+        label.setSize(fontMetrics.stringWidth(name), fontMetrics.getHeight());
     }
 }

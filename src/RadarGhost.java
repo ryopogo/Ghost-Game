@@ -40,6 +40,7 @@ public class RadarGhost extends Ghost{
     public RadarGhost(int instance){
         super(instance);
         super.audioFilePath = "";
+        super.dChang = 1;
     }
     @Override
     protected void move(Graphics g) {
